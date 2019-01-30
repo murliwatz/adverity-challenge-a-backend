@@ -1,6 +1,5 @@
 from pytrends.request import TrendReq
-from flask import Flask, request, Response
-import json
+from flask import Flask, request, Response, jsonify
 
 app = Flask(__name__)
 
@@ -27,7 +26,7 @@ def iot():
             })
         obj["data"].append(metrics)
 
-    return json.dumps(obj)
+    return jsonify(obj)
 
 if __name__ == "__main__":
     app.run()
