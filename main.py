@@ -1,12 +1,29 @@
 from pytrends.request import TrendReq
 from flask import Flask, request, Response, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
+@app.errorhandler(404) 
+def not_found(e):
+    return jsonify(
+        error=True,
+        message="this route doesn't exist"
+    ), 404
 
 @app.route('/trends/iot')
 def iot():
 
-    keywords = request.args.get('keywords').split(',')
+    keywords_raw = request.args.get('keywords')
+    
+    if keywords_raw == None or len(keywords_raw) == 0:
+        return jsonify(
+            error=True,
+            message="no keywords defined"
+        ), 404
+
+    keywords = keywords_raw.split(',')
 
     pytrends = TrendReq(hl='en-US', tz=360)
 
